@@ -13,7 +13,7 @@
 #SBATCH --partition=cpu
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=32
 #SBATCH --hint=nomultithread
 #SBATCH --mem=8G
 #SBATCH --time=00:40:00
@@ -49,7 +49,7 @@ CSV=results/baseline_${SLURM_JOB_ID}.csv
 ./build/pf_track --header > "$CSV"
 
 REPEATS=3
-THREADS="1 2 4 8 16 32 64"
+THREADS=""; for t in 1 2 4 8 16 32 64; do [ $t -le $SLURM_CPUS_PER_TASK ] && THREADS="$THREADS $t"; done
 STEPS=200          # 20 s of tracking at 10 Hz (reduced from a full flight)
 ENSEMBLE=2000      # impact Monte Carlo samples per prediction
 SEED=12345
