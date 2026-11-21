@@ -1,0 +1,88 @@
+== GPU ==
+name, driver_version
+NVIDIA RTX 6000 Ada Generation, 580.126.09
+== Compile ==
+== Plain run ==
+y[0] = 5.0, y[n-1] = 5.0 (expected 5.0)
+== nsys (timeline: transfers vs kernel) ==
+WARNING: CPU IP/backtrace sampling not supported, disabling.
+Try the 'nsys status --environment' command to learn more.
+
+WARNING: CPU context switch tracing not supported, disabling.
+Try the 'nsys status --environment' command to learn more.
+
+y[0] = 5.0, y[n-1] = 5.0 (expected 5.0)
+Collecting data...
+Generating '/var/tmp/nsys-report-7f88.qdstrm'
+[1/8] [0%                          ] nsys_test.nsys-rep[1/8] [0%                          ] nsys_test.nsys-rep[1/8] [===========50%              ] nsys_test.nsys-rep[1/8] [=======================96%  ] nsys_test.nsys-rep[1/8] [========================100%] nsys_test.nsys-rep[1/8] [========================100%] nsys_test.nsys-rep
+[2/8] [0%                          ] nsys_test.sqlite[2/8] [1%                          ] nsys_test.sqlite[2/8] [2%                          ] nsys_test.sqlite[2/8] [3%                          ] nsys_test.sqlite[2/8] [4%                          ] nsys_test.sqlite[2/8] [5%                          ] nsys_test.sqlite[2/8] [6%                          ] nsys_test.sqlite[2/8] [7%                          ] nsys_test.sqlite[2/8] [8%                          ] nsys_test.sqlite[2/8] [9%                          ] nsys_test.sqlite[2/8] [10%                         ] nsys_test.sqlite[2/8] [11%                         ] nsys_test.sqlite[2/8] [12%                         ] nsys_test.sqlite[2/8] [13%                         ] nsys_test.sqlite[2/8] [14%                         ] nsys_test.sqlite[2/8] [=15%                        ] nsys_test.sqlite[2/8] [=16%                        ] nsys_test.sqlite[2/8] [=17%                        ] nsys_test.sqlite[2/8] [==18%                       ] nsys_test.sqlite[2/8] [==19%                       ] nsys_test.sqlite[2/8] [==20%                       ] nsys_test.sqlite[2/8] [==21%                       ] nsys_test.sqlite[2/8] [===22%                      ] nsys_test.sqlite[2/8] [===23%                      ] nsys_test.sqlite[2/8] [===24%                      ] nsys_test.sqlite[2/8] [====25%                     ] nsys_test.sqlite[2/8] [====26%                     ] nsys_test.sqlite[2/8] [====27%                     ] nsys_test.sqlite[2/8] [====28%                     ] nsys_test.sqlite[2/8] [=====29%                    ] nsys_test.sqlite[2/8] [=====30%                    ] nsys_test.sqlite[2/8] [=====31%                    ] nsys_test.sqlite[2/8] [=====32%                    ] nsys_test.sqlite[2/8] [======33%                   ] nsys_test.sqlite[2/8] [======34%                   ] nsys_test.sqlite[2/8] [======35%                   ] nsys_test.sqlite[2/8] [=======36%                  ] nsys_test.sqlite[2/8] [=======37%                  ] nsys_test.sqlite[2/8] [=======38%                  ] nsys_test.sqlite[2/8] [=======39%                  ] nsys_test.sqlite[2/8] [========40%                 ] nsys_test.sqlite[2/8] [========41%                 ] nsys_test.sqlite[2/8] [========42%                 ] nsys_test.sqlite[2/8] [=========43%                ] nsys_test.sqlite[2/8] [=========44%                ] nsys_test.sqlite[2/8] [=========45%                ] nsys_test.sqlite[2/8] [=========46%                ] nsys_test.sqlite[2/8] [==========47%               ] nsys_test.sqlite[2/8] [==========48%               ] nsys_test.sqlite[2/8] [==========49%               ] nsys_test.sqlite[2/8] [===========50%              ] nsys_test.sqlite[2/8] [===========51%              ] nsys_test.sqlite[2/8] [===========52%              ] nsys_test.sqlite[2/8] [===========53%              ] nsys_test.sqlite[2/8] [============54%             ] nsys_test.sqlite[2/8] [============55%             ] nsys_test.sqlite[2/8] [============56%             ] nsys_test.sqlite[2/8] [============57%             ] nsys_test.sqlite[2/8] [=============58%            ] nsys_test.sqlite[2/8] [=============59%            ] nsys_test.sqlite[2/8] [=============60%            ] nsys_test.sqlite[2/8] [==============61%           ] nsys_test.sqlite[2/8] [==============62%           ] nsys_test.sqlite[2/8] [==============63%           ] nsys_test.sqlite[2/8] [==============64%           ] nsys_test.sqlite[2/8] [===============65%          ] nsys_test.sqlite[2/8] [===============66%          ] nsys_test.sqlite[2/8] [===============67%          ] nsys_test.sqlite[2/8] [================68%         ] nsys_test.sqlite[2/8] [================69%         ] nsys_test.sqlite[2/8] [================70%         ] nsys_test.sqlite[2/8] [================71%         ] nsys_test.sqlite[2/8] [=================72%        ] nsys_test.sqlite[2/8] [=================73%        ] nsys_test.sqlite[2/8] [=================74%        ] nsys_test.sqlite[2/8] [==================75%       ] nsys_test.sqlite[2/8] [==================76%       ] nsys_test.sqlite[2/8] [==================77%       ] nsys_test.sqlite[2/8] [==================78%       ] nsys_test.sqlite[2/8] [===================79%      ] nsys_test.sqlite[2/8] [===================80%      ] nsys_test.sqlite[2/8] [===================81%      ] nsys_test.sqlite[2/8] [===================82%      ] nsys_test.sqlite[2/8] [====================83%     ] nsys_test.sqlite[2/8] [====================84%     ] nsys_test.sqlite[2/8] [====================85%     ] nsys_test.sqlite[2/8] [=====================86%    ] nsys_test.sqlite[2/8] [=====================87%    ] nsys_test.sqlite[2/8] [=====================88%    ] nsys_test.sqlite[2/8] [=====================89%    ] nsys_test.sqlite[2/8] [======================90%   ] nsys_test.sqlite[2/8] [======================91%   ] nsys_test.sqlite[2/8] [======================92%   ] nsys_test.sqlite[2/8] [=======================93%  ] nsys_test.sqlite[2/8] [=======================94%  ] nsys_test.sqlite[2/8] [=======================95%  ] nsys_test.sqlite[2/8] [=======================96%  ] nsys_test.sqlite[2/8] [========================97% ] nsys_test.sqlite[2/8] [========================98% ] nsys_test.sqlite[2/8] [========================99% ] nsys_test.sqlite[2/8] [========================100%] nsys_test.sqlite[2/8] [========================100%] nsys_test.sqlite
+SKIPPED: /home/hpca28/hpc_missile_track_and_intercept/nsys_test.sqlite does not contain NV Tools Extension (NVTX) data.
+[3/8] Executing 'nvtx_sum' stats report
+[4/8] Executing 'osrt_sum' stats report
+
+ Time (%)  Total Time (ns)  Num Calls   Avg (ns)    Med (ns)   Min (ns)  Max (ns)   StdDev (ns)       Name     
+ --------  ---------------  ---------  ----------  ----------  --------  ---------  -----------  --------------
+     80.0        342389683         23  14886508.0  10058312.0    115581  130337746   26439041.5  poll          
+     19.6         83790667        486    172408.8      8553.0      1001    8919015     635172.9  ioctl         
+      0.2           789563         25     31582.5      4606.0      1673     469181      92663.3  mmap64        
+      0.1           250289          3     83429.7     33730.0     10776     205783     106580.8  sem_timedwait 
+      0.0           155025         15     10335.0      5028.0      1692      44145      13853.1  mmap          
+      0.0           148801         26      5723.1      3700.5      1032      21622       5826.5  fopen         
+      0.0           142180          3     47393.3     38066.0     33930      70184      19845.3  pthread_create
+      0.0           112228         44      2550.6      2063.0      1001       6890       1518.8  open64        
+      0.0            92675         11      8425.0      8001.0      1493      20260       6446.8  write         
+      0.0            54730          1     54730.0     54730.0     54730      54730          0.0  fgets         
+      0.0            36184          8      4523.0      2839.5      1923      16114       4741.7  munmap        
+      0.0            27001          6      4500.2      5698.5      1172       6760       2541.2  open          
+      0.0            24557         12      2046.4      1452.0      1052       4566       1219.3  fclose        
+      0.0            24356          2     12178.0     12178.0      8653      15703       4985.1  socket        
+      0.0            19749          3      6583.0      8252.0      2564       8933       3497.2  pipe2         
+      0.0            18446          5      3689.2      3745.0      1522       6700       1943.7  close         
+      0.0            18017          2      9008.5      9008.5      8853       9164        219.9  fread         
+      0.0            13670          1     13670.0     13670.0     13670      13670          0.0  connect       
+      0.0             7732          1      7732.0      7732.0      7732       7732          0.0  fflush        
+      0.0             6940          3      2313.3      2554.0      1392       2994        827.7  read          
+      0.0             3235          1      3235.0      3235.0      3235       3235          0.0  bind          
+      0.0             2684          2      1342.0      1342.0      1222       1462        169.7  fcntl         
+      0.0             2684          2      1342.0      1342.0      1292       1392         70.7  fwrite        
+      0.0             1432          1      1432.0      1432.0      1432       1432          0.0  listen        
+
+[5/8] Executing 'cuda_api_sum' stats report
+
+ Time (%)  Total Time (ns)  Num Calls   Avg (ns)    Med (ns)   Min (ns)  Max (ns)  StdDev (ns)           Name         
+ --------  ---------------  ---------  ----------  ----------  --------  --------  -----------  ----------------------
+     85.9         87460024          2  43730012.0  43730012.0     63233  87396791   61754151.1  cudaMalloc            
+     12.2         12411106          3   4137035.3   4163030.0   3706158   4541918     418485.9  cudaMemcpy            
+      1.5          1530003          2    765001.5    765001.5    257750   1272253     717362.0  cudaFree              
+      0.2           241465          1    241465.0    241465.0    241465    241465          0.0  cudaLaunchKernel      
+      0.1           130593          1    130593.0    130593.0    130593    130593          0.0  cudaDeviceSynchronize 
+      0.0             1322          1      1322.0      1322.0      1322      1322          0.0  cuModuleGetLoadingMode
+
+[6/8] Executing 'cuda_gpu_kern_sum' stats report
+
+ Time (%)  Total Time (ns)  Instances  Avg (ns)  Med (ns)  Min (ns)  Max (ns)  StdDev (ns)                    Name                   
+ --------  ---------------  ---------  --------  --------  --------  --------  -----------  -----------------------------------------
+    100.0           132769          1  132769.0  132769.0    132769    132769          0.0  saxpy(int, float, const float *, float *)
+
+[7/8] Executing 'cuda_gpu_mem_time_sum' stats report
+
+ Time (%)  Total Time (ns)  Count  Avg (ns)   Med (ns)   Min (ns)  Max (ns)  StdDev (ns)           Operation          
+ --------  ---------------  -----  ---------  ---------  --------  --------  -----------  ----------------------------
+     63.6          7729685      2  3864842.5  3864842.5   3641465   4088220     315903.5  [CUDA memcpy Host-to-Device]
+     36.4          4421951      1  4421951.0  4421951.0   4421951   4421951          0.0  [CUDA memcpy Device-to-Host]
+
+[8/8] Executing 'cuda_gpu_mem_size_sum' stats report
+
+ Total (MB)  Count  Avg (MB)  Med (MB)  Min (MB)  Max (MB)  StdDev (MB)           Operation          
+ ----------  -----  --------  --------  --------  --------  -----------  ----------------------------
+    134.218      2    67.109    67.109    67.109    67.109        0.000  [CUDA memcpy Host-to-Device]
+     67.109      1    67.109    67.109    67.109    67.109        0.000  [CUDA memcpy Device-to-Host]
+
+Generated:
+	/home/hpca28/hpc_missile_track_and_intercept/nsys_test.nsys-rep
+	/home/hpca28/hpc_missile_track_and_intercept/nsys_test.sqlite
+== ncu (hardware metrics: the real permission test) ==
+==PROF== Connected to process 3637241 (/home/hpca28/hpc_missile_track_and_intercept/saxpy)
+==ERROR== ERR_NVGPUCTRPERM - The user does not have permission to access NVIDIA GPU Performance Counters on the target device 0. For instructions on enabling permissions and to get more information see https://developer.nvidia.com/ERR_NVGPUCTRPERM
+y[0] = 5.0, y[n-1] = 5.0 (expected 5.0)
+==PROF== Disconnected from process 3637241
