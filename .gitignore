@@ -1,3 +1,5 @@
 saxpy
 *.sqlite
 *.nsys-rep
+build/
+__pycache__/

@@ -15,14 +15,14 @@ nvidia-smi --query-gpu=name,driver_version --format=csv
 
 echo "== Compile =="
 # Compiled on the GPU node, so 'native' targets whichever GPU we landed on.
-nvcc -O2 -arch=native src/test/saxpy.cu -o saxpy \
-  || nvc++ -cuda -gpu=ccnative -O2 src/test/saxpy.cu -o saxpy   # fallback if nvcc isn't on PATH
+mkdir -p build && nvcc -O2 -arch=native src/test/saxpy.cu -o build/saxpy \
+  || nvc++ -cuda -gpu=ccnative -O2 src/test/saxpy.cu -o build/saxpy   # fallback if nvcc isn't on PATH
 
 echo "== Plain run =="
-./saxpy
+./build/saxpy
 
 echo "== nsys (timeline: transfers vs kernel) =="
-nsys profile --stats=true --force-overwrite=true -o nsys_test ./saxpy
+nsys profile --stats=true --force-overwrite=true -o results/nsys_test ./build/saxpy
 
 echo "== ncu (hardware metrics: the real permission test) =="
-ncu --section SpeedOfLight ./saxpy
+ncu --section SpeedOfLight ./build/saxpy
