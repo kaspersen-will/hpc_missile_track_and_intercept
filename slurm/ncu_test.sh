@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=4G
 #SBATCH --time=00:05:00
-#SBATCH --output=ncu_test_%j.out
+#SBATCH --output=results/ncu_test_%j.out
 
 module purge
 module load nvhpc/25.7
@@ -15,8 +15,8 @@ nvidia-smi --query-gpu=name,driver_version --format=csv
 
 echo "== Compile =="
 # Compiled on the GPU node, so 'native' targets whichever GPU we landed on.
-nvcc -O2 -arch=native saxpy.cu -o saxpy \
-  || nvc++ -cuda -gpu=ccnative -O2 saxpy.cu -o saxpy   # fallback if nvcc isn't on PATH
+nvcc -O2 -arch=native src/test/saxpy.cu -o saxpy \
+  || nvc++ -cuda -gpu=ccnative -O2 src/test/saxpy.cu -o saxpy   # fallback if nvcc isn't on PATH
 
 echo "== Plain run =="
 ./saxpy
