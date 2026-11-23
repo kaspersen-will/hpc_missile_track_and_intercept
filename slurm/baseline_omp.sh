@@ -31,7 +31,7 @@ echo "== Reproducibility record =="
 echo "date:        $(date -Is)"
 echo "node:        $(hostname)"
 echo "job:         $SLURM_JOB_ID  cpus-per-task=$SLURM_CPUS_PER_TASK"
-echo "git commit:  $(git rev-parse --short HEAD 2>/dev/null || echo n/a)  $(git status --porcelain | wc -l) uncommitted file(s)"
+echo "git commit:  $(git rev-parse --short HEAD 2>/dev/null || echo n/a)  $(git status --porcelain --untracked-files=no | wc -l) uncommitted file(s)"
 echo "compiler:    $(gcc --version | head -1)"
 module list 2>&1 | sed 's/^/  /'
 lscpu | grep -E 'Model name|Socket|Core|Thread|NUMA node\(s\)|L3' | sed 's/^/  /'
