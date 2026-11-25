@@ -19,8 +19,17 @@
  *
  * PARALLELISM IN THIS VERSION
  *   predict, weight, ESS, impact ensemble -> OpenMP parallel for
- *   resample                               -> SERIAL on purpose: it is the
- *       planned optimisation target (parallel prefix-sum resampling).
+ *   resample  --resample serial   -> original serial CDF + serial walk
+ *                                    (the measured baseline, job 34211)
+ *             --resample parallel -> OPTIMISATION (default):
+ *       1. CDF by a two-pass blocked prefix sum (per-thread block sums,
+ *          scan of the T block totals, then each block adds its offset);
+ *       2. systematic resampling split by OUTPUT index: each thread finds
+ *          its first source particle with one binary search in the CDF,
+ *          then walks forward exactly like the serial loop.
+ *       The same parallel CDF is reused by the impact stage when the weights
+ *       are not uniform. Both modes pick the same particles up to
+ *       floating-point summation order in the CDF.
  *
  * RANDOM NUMBERS
  *   Counter-based (hash of seed, step, particle, component), so each particle
@@ -159,6 +168,73 @@ static inline double wrap_pi(double a) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Resampling kernels                                                  */
+/* ------------------------------------------------------------------ */
+/* Inclusive prefix sum cdf[i] = w[0] + ... + w[i]; last entry forced to 1.
+   part must hold omp_get_max_threads() + 1 doubles. */
+static void build_cdf(const double *w, double *cdf, long N, int parallel,
+                      double *part) {
+#ifdef _OPENMP
+    if (parallel) {
+        #pragma omp parallel
+        {
+            int tid = omp_get_thread_num(), nt = omp_get_num_threads();
+            long lo = N * tid / nt, hi = N * (tid + 1) / nt;
+            double s = 0;                       /* pass 1: block sums      */
+            for (long i = lo; i < hi; ++i) s += w[i];
+            part[tid + 1] = s;
+            #pragma omp barrier
+            #pragma omp single                  /* scan of T block totals  */
+            { part[0] = 0; for (int k = 1; k <= nt; ++k) part[k] += part[k - 1]; }
+            s = part[tid];                      /* pass 2: scan with offset */
+            for (long i = lo; i < hi; ++i) { s += w[i]; cdf[i] = s; }
+        }
+        cdf[N - 1] = 1.0;
+        return;
+    }
+#else
+    (void)parallel; (void)part;
+#endif
+    cdf[0] = w[0];
+    for (long i = 1; i < N; ++i) cdf[i] = cdf[i - 1] + w[i];
+    cdf[N - 1] = 1.0;
+}
+
+/* Systematic resampling: output i copies the first j with cdf[j] >= u0 + i/N. */
+static void resample_systematic(const State *p, State *pnew, const double *cdf,
+                                long N, double u0, int parallel) {
+#ifdef _OPENMP
+    if (parallel) {
+        #pragma omp parallel
+        {
+            int tid = omp_get_thread_num(), nt = omp_get_num_threads();
+            long lo = N * tid / nt, hi = N * (tid + 1) / nt;
+            if (lo < hi) {
+                double u = u0 + (double)lo / N;
+                long a = 0, b = N - 1;          /* lower_bound(cdf, u)     */
+                while (a < b) { long m = (a + b) / 2; if (cdf[m] < u) a = m + 1; else b = m; }
+                long j = a;
+                for (long i = lo; i < hi; ++i) {
+                    u = u0 + (double)i / N;
+                    while (cdf[j] < u) ++j;
+                    pnew[i] = p[j];
+                }
+            }
+        }
+        return;
+    }
+#else
+    (void)parallel;
+#endif
+    long j = 0;
+    for (long i = 0; i < N; ++i) {
+        double u = u0 + (double)i / N;
+        while (cdf[j] < u) ++j;
+        pnew[i] = p[j];
+    }
+}
+
+/* ------------------------------------------------------------------ */
 /* Options                                                             */
 /* ------------------------------------------------------------------ */
 typedef struct {
@@ -167,22 +243,24 @@ typedef struct {
     long ensemble;
     uint64_t seed;
     const char *label;
+    int par_resample;                /* 0 = serial baseline, 1 = parallel */
 } Opts;
 
 static void usage(const char *p) {
     fprintf(stderr,
         "usage: %s [--particles N] [--steps S] [--radars R] [--ensemble M]\n"
-        "          [--impact-every K] [--seed X] [--label TEXT] [--header]\n", p);
+        "          [--impact-every K] [--seed X] [--label TEXT]\n"
+        "          [--resample serial|parallel] [--header]\n", p);
 }
 
 static const char *CSV_HEADER =
     "label,threads,particles,steps,radars,ensemble,impact_every,seed,"
     "t_total,t_predict,t_weight,t_resample,t_impact,n_resample,"
     "cycle_mean_ms,cycle_max_ms,deadline_frac,"
-    "rmse_pos_m,final_pos_err_m,impact_err_m,impact_spread_m";
+    "rmse_pos_m,final_pos_err_m,impact_err_m,impact_spread_m,resample_mode";
 
 int main(int argc, char **argv) {
-    Opts o = { 100000, 200, 3, 10, 2000, 12345, "run" };
+    Opts o = { 100000, 200, 3, 10, 2000, 12345, "run", 1 };
     for (int i = 1; i < argc; ++i) {
         const char *a = argv[i];
         if (!strcmp(a, "--header")) { puts(CSV_HEADER); return 0; }
@@ -194,6 +272,12 @@ int main(int argc, char **argv) {
         else if (!strcmp(a, "--impact-every")) o.impact_every = atoi(argv[++i]);
         else if (!strcmp(a, "--seed"))         o.seed = strtoull(argv[++i], 0, 10);
         else if (!strcmp(a, "--label"))        o.label = argv[++i];
+        else if (!strcmp(a, "--resample")) {
+            const char *v = argv[++i];
+            if      (!strcmp(v, "serial"))   o.par_resample = 0;
+            else if (!strcmp(v, "parallel")) o.par_resample = 1;
+            else { usage(argv[0]); return 1; }
+        }
         else { usage(argv[0]); return 1; }
     }
     if (o.n_radars < 1 || o.n_radars > MAX_RADARS || o.n_particles < 2 ||
@@ -248,7 +332,8 @@ int main(int argc, char **argv) {
     double *logw = malloc(sizeof(double) * N);
     double *w    = malloc(sizeof(double) * N);
     double *cdf  = malloc(sizeof(double) * N);
-    if (!p || !pnew || !logw || !w || !cdf) { fprintf(stderr, "out of memory\n"); return 1; }
+    double *part = malloc(sizeof(double) * (threads + 1));  /* scan block totals */
+    if (!p || !pnew || !logw || !w || !cdf || !part) { fprintf(stderr, "out of memory\n"); return 1; }
 
     /* Prior: cueing track = truth + one random offset, then spread. */
     const double psig[6] = { PRIOR_POS, PRIOR_POS, PRIOR_POS,
@@ -324,21 +409,19 @@ int main(int argc, char **argv) {
         double ess = 1.0 / w2;
         double c2 = wtime();
 
-        /* ---- resample (systematic, SERIAL baseline) --------------- */
+        /* ---- resample (systematic; serial or parallel, see top) ---- */
         int resampled = ess < 0.5 * N;
         if (resampled) {
-            cdf[0] = w[0];
-            for (long i = 1; i < N; ++i) cdf[i] = cdf[i - 1] + w[i];
-            cdf[N - 1] = 1.0;
+            build_cdf(w, cdf, N, o.par_resample, part);
             double u0 = u01(rng_key(o.seed, S_RESAMPLE, t, 0), 0) / N;
-            long j = 0;
-            for (long i = 0; i < N; ++i) {
-                double u = u0 + (double)i / N;
-                while (cdf[j] < u) ++j;
-                pnew[i] = p[j];
-            }
+            resample_systematic(p, pnew, cdf, N, u0, o.par_resample);
             State *sw = p; p = pnew; pnew = sw;
-            for (long i = 0; i < N; ++i) w[i] = 1.0 / N;
+            if (o.par_resample) {
+                #pragma omp parallel for schedule(static)
+                for (long i = 0; i < N; ++i) w[i] = 1.0 / N;
+            } else {
+                for (long i = 0; i < N; ++i) w[i] = 1.0 / N;
+            }
             ++n_res;
 
             /* Regularisation (roughening): resampling duplicates particles,
@@ -373,11 +456,7 @@ int main(int argc, char **argv) {
             /* After resampling weights are uniform: pick any index.
                Otherwise draw by weight through the CDF. */
             int weights_uniform = resampled;
-            if (!weights_uniform) {
-                cdf[0] = w[0];
-                for (long i = 1; i < N; ++i) cdf[i] = cdf[i - 1] + w[i];
-                cdf[N - 1] = 1.0;
-            }
+            if (!weights_uniform) build_cdf(w, cdf, N, o.par_resample, part);
             double sx = 0, sy = 0, sxx = 0, syy = 0; long hit = 0;
             #pragma omp parallel for schedule(dynamic, 64) reduction(+:sx,sy,sxx,syy,hit)
             for (long m = 0; m < o.ensemble; ++m) {
@@ -422,24 +501,25 @@ int main(int argc, char **argv) {
     double imp_err = hypot(last_ix - tix, last_iy - tiy);
     printf("%s,%d,%ld,%d,%d,%ld,%d,%llu,"
            "%.6f,%.6f,%.6f,%.6f,%.6f,%d,"
-           "%.3f,%.3f,%.4f,%.2f,%.2f,%.2f,%.2f\n",
+           "%.3f,%.3f,%.4f,%.2f,%.2f,%.2f,%.2f,%s\n",
            o.label, threads, N, o.steps, o.n_radars, o.ensemble, o.impact_every,
            (unsigned long long)o.seed,
            t_total, t_pred, t_wt, t_res, t_imp, n_res,
            cyc_sum / o.steps, cyc_max, (double)n_ok / o.steps,
-           sqrt(se_sum / o.steps), final_err, imp_err, last_spread);
+           sqrt(se_sum / o.steps), final_err, imp_err, last_spread,
+           o.par_resample ? "parallel" : "serial");
 
     fprintf(stderr,
-        "[pf_track] threads=%d N=%ld steps=%d radars=%d ensemble=%ld\n"
+        "[pf_track] threads=%d N=%ld steps=%d radars=%d ensemble=%ld resample=%s\n"
         "  total %.3f s | predict %.3f | weight %.3f | resample %.3f (%d x) | impact %.3f\n"
         "  cycle mean %.2f ms, max %.2f ms, %.1f%% within %.0f ms\n"
         "  pos RMSE %.1f m, final %.1f m | impact err %.1f m, spread %.1f m "
         "(true impact %.0f, %.0f)\n",
         threads, N, o.steps, o.n_radars, o.ensemble,
-        t_total, t_pred, t_wt, t_res, n_res, t_imp,
+        o.par_resample ? "parallel" : "serial", t_total, t_pred, t_wt, t_res, n_res, t_imp,
         cyc_sum / o.steps, cyc_max, 100.0 * n_ok / o.steps, DEADLINE_MS,
         sqrt(se_sum / o.steps), final_err, imp_err, last_spread, tix, tiy);
 
-    free(truth); free(meas); free(p); free(pnew); free(logw); free(w); free(cdf);
+    free(truth); free(meas); free(p); free(pnew); free(logw); free(w); free(cdf); free(part);
     return 0;
 }
