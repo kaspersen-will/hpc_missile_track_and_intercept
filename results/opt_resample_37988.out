@@ -1,0 +1,372 @@
+== Reproducibility record ==
+date:        2026-11-25T13:30:24+01:00
+node:        julia
+job:         37988  cpus-per-task=32
+git commit:  6fc319b  0 uncommitted file(s)
+compiler:    gcc (GCC) 12.3.0
+  
+  Currently Loaded Modules:
+    1) GCCcore/12.3.0                     8) libevent/2.1.12-GCCcore-12.3.0
+    2) GCC/12.3.0                         9) UCX/1.14.1-GCCcore-12.3.0
+    3) numactl/2.0.16-GCCcore-12.3.0     10) libfabric/1.18.0-GCCcore-12.3.0
+    4) libxml2/2.11.4-GCCcore-12.3.0     11) PMIx/4.2.4-GCCcore-12.3.0
+    5) libpciaccess/0.17-GCCcore-12.3.0  12) UCC/1.2.0-GCCcore-12.3.0
+    6) hwloc/2.9.1-GCCcore-12.3.0        13) OpenMPI/4.1.5-GCC-12.3.0
+    7) OpenSSL/1.1
+  
+   
+  
+  Model name:                              AMD EPYC 9745 128-Core Processor
+  Thread(s) per core:                      2
+  Core(s) per socket:                      128
+  Socket(s):                               2
+  L3 cache:                                512 MiB (16 instances)
+  NUMA node(s):                            2
+CFLAGS:      -O3 -march=native -fopenmp -std=c11 -Wall
+== test_resample (32 threads) ==
+[uniform-ish] threads=32 N=1000000
+  cdf max |serial - parallel|      = 4.186e-14
+  walk, same cdf: mismatches       = 0   ok
+  end to end:     mismatches       = 0 of 1000000 (0.0000%)
+[peaked (ESS ~ 1%)] threads=32 N=1000000
+  cdf max |serial - parallel|      = 2.265e-14
+  walk, same cdf: mismatches       = 0   ok
+  end to end:     mismatches       = 0 of 1000000 (0.0000%)
+RESULT: PASS
+[pf_track] threads=1 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 51.513 s | predict 25.266 | weight 16.409 | resample 7.750 (46 x) | impact 1.921
+  cycle mean 256.73 ms, max 465.40 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 67.1 m, spread 429.7 m (true impact 34921, 705)
+[pf_track] threads=1 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 51.585 s | predict 25.280 | weight 16.440 | resample 7.765 (46 x) | impact 1.934
+  cycle mean 257.09 ms, max 464.24 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 67.1 m, spread 429.7 m (true impact 34921, 705)
+[pf_track] threads=2 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 26.252 s | predict 12.685 | weight 8.253 | resample 4.242 (46 x) | impact 0.989
+  cycle mean 130.84 ms, max 240.86 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 75.8 m, spread 431.1 m (true impact 34921, 705)
+[pf_track] threads=2 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 25.947 s | predict 12.664 | weight 8.272 | resample 3.939 (46 x) | impact 0.988
+  cycle mean 129.32 ms, max 234.14 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 75.8 m, spread 431.1 m (true impact 34921, 705)
+[pf_track] threads=4 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 13.580 s | predict 6.349 | weight 4.208 | resample 2.480 (46 x) | impact 0.500
+  cycle mean 67.69 ms, max 128.68 ms, 77.0% within 100 ms
+  pos RMSE 37.9 m, final 27.2 m | impact err 73.0 m, spread 430.0 m (true impact 34921, 705)
+[pf_track] threads=4 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 13.082 s | predict 6.352 | weight 4.204 | resample 1.989 (46 x) | impact 0.496
+  cycle mean 65.20 ms, max 118.13 ms, 98.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 65.7 m, spread 434.7 m (true impact 34921, 705)
+[pf_track] threads=8 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 7.214 s | predict 3.188 | weight 2.167 | resample 1.581 (46 x) | impact 0.256
+  cycle mean 35.96 ms, max 77.20 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 70.9 m, spread 427.8 m (true impact 34921, 705)
+[pf_track] threads=8 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 6.665 s | predict 3.187 | weight 2.163 | resample 1.044 (46 x) | impact 0.250
+  cycle mean 33.22 ms, max 60.88 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 62.0 m, spread 436.6 m (true impact 34921, 705)
+[pf_track] threads=16 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 4.051 s | predict 1.624 | weight 1.132 | resample 1.145 (46 x) | impact 0.138
+  cycle mean 20.19 ms, max 45.12 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 59.1 m, spread 428.2 m (true impact 34921, 705)
+[pf_track] threads=16 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 3.497 s | predict 1.638 | weight 1.119 | resample 0.599 (45 x) | impact 0.128
+  cycle mean 17.42 ms, max 32.64 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 73.2 m, spread 425.1 m (true impact 34921, 705)
+[pf_track] threads=32 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 2.540 s | predict 0.878 | weight 0.587 | resample 0.984 (46 x) | impact 0.081
+  cycle mean 12.65 ms, max 33.54 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 74.2 m, spread 426.0 m (true impact 34921, 705)
+[pf_track] threads=32 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 1.762 s | predict 0.839 | weight 0.567 | resample 0.283 (45 x) | impact 0.066
+  cycle mean 8.78 ms, max 16.34 ms, 100.0% within 100 ms
+  pos RMSE 37.9 m, final 27.4 m | impact err 66.8 m, spread 419.9 m (true impact 34921, 705)
+[pf_track] threads=1 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 6.949 s | predict 2.528 | weight 1.638 | resample 0.864 (51 x) | impact 1.902
+  cycle mean 34.66 ms, max 136.33 ms, 90.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 79.7 m, spread 612.8 m (true impact 34921, 705)
+[pf_track] threads=1 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 6.943 s | predict 2.524 | weight 1.638 | resample 0.866 (51 x) | impact 1.898
+  cycle mean 34.63 ms, max 136.31 ms, 90.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 79.7 m, spread 612.8 m (true impact 34921, 705)
+[pf_track] threads=2 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 3.536 s | predict 1.268 | weight 0.820 | resample 0.465 (50 x) | impact 0.974
+  cycle mean 17.64 ms, max 70.35 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 99.6 m, spread 593.2 m (true impact 34921, 705)
+[pf_track] threads=2 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 3.502 s | predict 1.268 | weight 0.823 | resample 0.428 (50 x) | impact 0.974
+  cycle mean 17.47 ms, max 69.53 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 99.6 m, spread 593.2 m (true impact 34921, 705)
+[pf_track] threads=4 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 1.812 s | predict 0.637 | weight 0.415 | resample 0.267 (50 x) | impact 0.488
+  cycle mean 9.04 ms, max 35.94 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.4 m | impact err 61.1 m, spread 586.2 m (true impact 34921, 705)
+[pf_track] threads=4 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 1.758 s | predict 0.637 | weight 0.413 | resample 0.216 (50 x) | impact 0.487
+  cycle mean 8.77 ms, max 34.97 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 67.5 m, spread 566.7 m (true impact 34921, 705)
+[pf_track] threads=8 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.947 s | predict 0.320 | weight 0.208 | resample 0.171 (50 x) | impact 0.245
+  cycle mean 4.72 ms, max 18.83 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.4 m | impact err 79.1 m, spread 574.1 m (true impact 34921, 705)
+[pf_track] threads=8 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.885 s | predict 0.320 | weight 0.208 | resample 0.110 (51 x) | impact 0.245
+  cycle mean 4.41 ms, max 17.47 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.3 m | impact err 84.8 m, spread 608.5 m (true impact 34921, 705)
+[pf_track] threads=16 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.527 s | predict 0.164 | weight 0.109 | resample 0.127 (50 x) | impact 0.125
+  cycle mean 2.63 ms, max 10.32 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.5 m | impact err 69.2 m, spread 591.4 m (true impact 34921, 705)
+[pf_track] threads=16 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.468 s | predict 0.166 | weight 0.110 | resample 0.064 (50 x) | impact 0.126
+  cycle mean 2.33 ms, max 9.24 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.5 m | impact err 83.9 m, spread 584.5 m (true impact 34921, 705)
+[pf_track] threads=32 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.332 s | predict 0.088 | weight 0.064 | resample 0.110 (50 x) | impact 0.067
+  cycle mean 1.65 ms, max 6.39 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.2 m | impact err 103.0 m, spread 606.6 m (true impact 34921, 705)
+[pf_track] threads=32 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.248 s | predict 0.085 | weight 0.063 | resample 0.033 (51 x) | impact 0.064
+  cycle mean 1.23 ms, max 4.69 ms, 100.0% within 100 ms
+  pos RMSE 39.7 m, final 26.2 m | impact err 51.7 m, spread 611.9 m (true impact 34921, 705)
+[pf_track] threads=16 N=10000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 38.002 s | predict 16.233 | weight 12.573 | resample 8.833 (36 x) | impact 0.250
+  cycle mean 189.45 ms, max 437.80 ms, 0.0% within 100 ms
+  pos RMSE 37.4 m, final 27.8 m | impact err 124.4 m, spread 322.1 m (true impact 34921, 705)
+[pf_track] threads=16 N=10000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 33.851 s | predict 16.403 | weight 12.275 | resample 4.861 (36 x) | impact 0.197
+  cycle mean 168.68 ms, max 294.54 ms, 0.0% within 100 ms
+  pos RMSE 37.4 m, final 27.7 m | impact err 119.3 m, spread 327.6 m (true impact 34921, 705)
+[pf_track] threads=32 N=10000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 22.602 s | predict 8.584 | weight 6.656 | resample 7.099 (36 x) | impact 0.192
+  cycle mean 112.66 ms, max 319.72 ms, 82.0% within 100 ms
+  pos RMSE 37.4 m, final 27.8 m | impact err 130.0 m, spread 322.3 m (true impact 34921, 705)
+[pf_track] threads=32 N=10000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 17.785 s | predict 8.416 | weight 6.586 | resample 2.614 (36 x) | impact 0.107
+  cycle mean 88.61 ms, max 159.15 ms, 82.0% within 100 ms
+  pos RMSE 37.3 m, final 27.7 m | impact err 115.2 m, spread 323.1 m (true impact 34921, 705)
+[pf_track] threads=1 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 51.579 s | predict 25.249 | weight 16.425 | resample 7.820 (46 x) | impact 1.920
+  cycle mean 257.07 ms, max 465.86 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 67.1 m, spread 429.7 m (true impact 34921, 705)
+[pf_track] threads=1 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 51.509 s | predict 25.253 | weight 16.429 | resample 7.734 (46 x) | impact 1.927
+  cycle mean 256.72 ms, max 461.56 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 67.1 m, spread 429.7 m (true impact 34921, 705)
+[pf_track] threads=2 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 26.235 s | predict 12.669 | weight 8.262 | resample 4.230 (46 x) | impact 0.990
+  cycle mean 130.76 ms, max 240.38 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 75.8 m, spread 431.1 m (true impact 34921, 705)
+[pf_track] threads=2 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 26.003 s | predict 12.734 | weight 8.294 | resample 3.904 (46 x) | impact 0.988
+  cycle mean 129.60 ms, max 234.63 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 75.8 m, spread 431.1 m (true impact 34921, 705)
+[pf_track] threads=4 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 13.525 s | predict 6.343 | weight 4.214 | resample 2.424 (45 x) | impact 0.501
+  cycle mean 67.41 ms, max 128.66 ms, 77.5% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 68.9 m, spread 424.3 m (true impact 34921, 705)
+[pf_track] threads=4 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 13.085 s | predict 6.350 | weight 4.214 | resample 1.982 (46 x) | impact 0.496
+  cycle mean 65.21 ms, max 117.98 ms, 98.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 67.4 m, spread 434.5 m (true impact 34921, 705)
+[pf_track] threads=8 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 7.165 s | predict 3.185 | weight 2.158 | resample 1.545 (45 x) | impact 0.255
+  cycle mean 35.72 ms, max 78.22 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 72.8 m, spread 427.1 m (true impact 34921, 705)
+[pf_track] threads=8 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 6.652 s | predict 3.183 | weight 2.156 | resample 1.042 (46 x) | impact 0.250
+  cycle mean 33.16 ms, max 60.84 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 60.9 m, spread 421.2 m (true impact 34921, 705)
+[pf_track] threads=16 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 4.063 s | predict 1.629 | weight 1.128 | resample 1.159 (46 x) | impact 0.136
+  cycle mean 20.25 ms, max 44.86 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.2 m | impact err 73.9 m, spread 432.9 m (true impact 34921, 705)
+[pf_track] threads=16 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 3.534 s | predict 1.645 | weight 1.128 | resample 0.619 (46 x) | impact 0.129
+  cycle mean 17.60 ms, max 32.87 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.2 m | impact err 67.8 m, spread 424.9 m (true impact 34921, 705)
+[pf_track] threads=32 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 2.445 s | predict 0.854 | weight 0.566 | resample 0.939 (46 x) | impact 0.076
+  cycle mean 12.18 ms, max 36.24 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 62.4 m, spread 414.4 m (true impact 34921, 705)
+[pf_track] threads=32 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 1.819 s | predict 0.861 | weight 0.571 | resample 0.310 (46 x) | impact 0.068
+  cycle mean 9.05 ms, max 16.82 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 66.6 m, spread 429.1 m (true impact 34921, 705)
+[pf_track] threads=1 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 6.948 s | predict 2.526 | weight 1.647 | resample 0.860 (51 x) | impact 1.898
+  cycle mean 34.65 ms, max 136.25 ms, 90.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 79.7 m, spread 612.8 m (true impact 34921, 705)
+[pf_track] threads=1 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 6.955 s | predict 2.535 | weight 1.638 | resample 0.865 (51 x) | impact 1.901
+  cycle mean 34.69 ms, max 136.85 ms, 90.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 79.7 m, spread 612.8 m (true impact 34921, 705)
+[pf_track] threads=2 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 3.538 s | predict 1.268 | weight 0.822 | resample 0.466 (50 x) | impact 0.973
+  cycle mean 17.65 ms, max 70.38 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 99.6 m, spread 593.2 m (true impact 34921, 705)
+[pf_track] threads=2 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 3.504 s | predict 1.269 | weight 0.826 | resample 0.428 (50 x) | impact 0.973
+  cycle mean 17.48 ms, max 69.49 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 99.6 m, spread 593.2 m (true impact 34921, 705)
+[pf_track] threads=4 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 1.820 s | predict 0.638 | weight 0.423 | resample 0.267 (50 x) | impact 0.488
+  cycle mean 9.08 ms, max 36.02 ms, 100.0% within 100 ms
+  pos RMSE 39.5 m, final 26.4 m | impact err 61.0 m, spread 593.0 m (true impact 34921, 705)
+[pf_track] threads=4 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 1.763 s | predict 0.637 | weight 0.414 | resample 0.221 (51 x) | impact 0.488
+  cycle mean 8.79 ms, max 35.10 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.1 m | impact err 65.2 m, spread 621.1 m (true impact 34921, 705)
+[pf_track] threads=8 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.947 s | predict 0.319 | weight 0.208 | resample 0.171 (50 x) | impact 0.245
+  cycle mean 4.72 ms, max 18.84 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.3 m | impact err 82.5 m, spread 567.3 m (true impact 34921, 705)
+[pf_track] threads=8 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.883 s | predict 0.320 | weight 0.208 | resample 0.108 (50 x) | impact 0.244
+  cycle mean 4.40 ms, max 17.53 ms, 100.0% within 100 ms
+  pos RMSE 39.5 m, final 26.8 m | impact err 64.2 m, spread 568.7 m (true impact 34921, 705)
+[pf_track] threads=16 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.525 s | predict 0.164 | weight 0.110 | resample 0.124 (49 x) | impact 0.125
+  cycle mean 2.61 ms, max 10.38 ms, 100.0% within 100 ms
+  pos RMSE 39.5 m, final 26.1 m | impact err 52.4 m, spread 578.5 m (true impact 34921, 705)
+[pf_track] threads=16 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.471 s | predict 0.166 | weight 0.111 | resample 0.066 (51 x) | impact 0.126
+  cycle mean 2.34 ms, max 9.19 ms, 100.0% within 100 ms
+  pos RMSE 39.7 m, final 26.3 m | impact err 106.5 m, spread 601.2 m (true impact 34921, 705)
+[pf_track] threads=32 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.332 s | predict 0.089 | weight 0.065 | resample 0.110 (50 x) | impact 0.067
+  cycle mean 1.65 ms, max 6.37 ms, 100.0% within 100 ms
+  pos RMSE 39.7 m, final 26.5 m | impact err 74.2 m, spread 575.6 m (true impact 34921, 705)
+[pf_track] threads=32 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.248 s | predict 0.086 | weight 0.064 | resample 0.033 (50 x) | impact 0.064
+  cycle mean 1.23 ms, max 4.70 ms, 100.0% within 100 ms
+  pos RMSE 39.3 m, final 26.3 m | impact err 55.4 m, spread 592.5 m (true impact 34921, 705)
+[pf_track] threads=16 N=10000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 37.941 s | predict 16.293 | weight 12.357 | resample 8.903 (36 x) | impact 0.271
+  cycle mean 189.11 ms, max 443.07 ms, 0.0% within 100 ms
+  pos RMSE 37.3 m, final 27.8 m | impact err 116.1 m, spread 323.5 m (true impact 34921, 705)
+[pf_track] threads=16 N=10000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 33.555 s | predict 16.233 | weight 12.303 | resample 4.709 (36 x) | impact 0.197
+  cycle mean 167.21 ms, max 279.62 ms, 0.0% within 100 ms
+  pos RMSE 37.3 m, final 27.7 m | impact err 111.8 m, spread 323.5 m (true impact 34921, 705)
+[pf_track] threads=32 N=10000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 22.486 s | predict 8.494 | weight 6.619 | resample 7.097 (36 x) | impact 0.212
+  cycle mean 112.11 ms, max 319.97 ms, 82.0% within 100 ms
+  pos RMSE 37.3 m, final 27.7 m | impact err 113.3 m, spread 321.1 m (true impact 34921, 705)
+[pf_track] threads=32 N=10000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 18.133 s | predict 8.604 | weight 6.613 | resample 2.744 (36 x) | impact 0.106
+  cycle mean 90.33 ms, max 169.29 ms, 82.0% within 100 ms
+  pos RMSE 37.3 m, final 27.7 m | impact err 110.8 m, spread 321.0 m (true impact 34921, 705)
+[pf_track] threads=1 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 51.604 s | predict 25.389 | weight 16.443 | resample 7.699 (46 x) | impact 1.911
+  cycle mean 257.21 ms, max 464.64 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 67.1 m, spread 429.7 m (true impact 34921, 705)
+[pf_track] threads=1 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 51.136 s | predict 25.146 | weight 16.254 | resample 7.658 (46 x) | impact 1.912
+  cycle mean 254.85 ms, max 459.66 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 67.1 m, spread 429.7 m (true impact 34921, 705)
+[pf_track] threads=2 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 26.077 s | predict 12.592 | weight 8.227 | resample 4.192 (46 x) | impact 0.983
+  cycle mean 129.97 ms, max 240.95 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 75.8 m, spread 431.1 m (true impact 34921, 705)
+[pf_track] threads=2 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 25.854 s | predict 12.615 | weight 8.258 | resample 3.912 (46 x) | impact 0.985
+  cycle mean 128.85 ms, max 232.28 ms, 0.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 75.8 m, spread 431.1 m (true impact 34921, 705)
+[pf_track] threads=4 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 13.528 s | predict 6.324 | weight 4.189 | resample 2.474 (46 x) | impact 0.499
+  cycle mean 67.43 ms, max 128.39 ms, 77.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 78.3 m, spread 424.4 m (true impact 34921, 705)
+[pf_track] threads=4 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 12.962 s | predict 6.291 | weight 4.176 | resample 1.963 (46 x) | impact 0.491
+  cycle mean 64.60 ms, max 116.49 ms, 98.5% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 64.6 m, spread 426.9 m (true impact 34921, 705)
+[pf_track] threads=8 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 7.102 s | predict 3.162 | weight 2.141 | resample 1.525 (45 x) | impact 0.253
+  cycle mean 35.40 ms, max 71.52 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 78.4 m, spread 421.7 m (true impact 34921, 705)
+[pf_track] threads=8 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 6.547 s | predict 3.166 | weight 2.123 | resample 0.990 (44 x) | impact 0.247
+  cycle mean 32.63 ms, max 60.03 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 77.1 m, spread 419.8 m (true impact 34921, 705)
+[pf_track] threads=16 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 4.109 s | predict 1.641 | weight 1.127 | resample 1.189 (46 x) | impact 0.137
+  cycle mean 20.47 ms, max 46.55 ms, 100.0% within 100 ms
+  pos RMSE 37.9 m, final 27.4 m | impact err 64.7 m, spread 424.2 m (true impact 34921, 705)
+[pf_track] threads=16 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 3.459 s | predict 1.617 | weight 1.123 | resample 0.581 (46 x) | impact 0.126
+  cycle mean 17.24 ms, max 31.87 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.4 m | impact err 71.1 m, spread 434.2 m (true impact 34921, 705)
+[pf_track] threads=32 N=1000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 2.427 s | predict 0.850 | weight 0.564 | resample 0.928 (46 x) | impact 0.075
+  cycle mean 12.09 ms, max 31.47 ms, 100.0% within 100 ms
+  pos RMSE 38.0 m, final 27.3 m | impact err 67.5 m, spread 425.6 m (true impact 34921, 705)
+[pf_track] threads=32 N=1000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 1.817 s | predict 0.863 | weight 0.569 | resample 0.309 (46 x) | impact 0.068
+  cycle mean 9.05 ms, max 16.66 ms, 100.0% within 100 ms
+  pos RMSE 38.1 m, final 27.3 m | impact err 70.6 m, spread 428.2 m (true impact 34921, 705)
+[pf_track] threads=1 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 6.852 s | predict 2.492 | weight 1.616 | resample 0.855 (51 x) | impact 1.871
+  cycle mean 34.17 ms, max 134.55 ms, 90.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 79.7 m, spread 612.8 m (true impact 34921, 705)
+[pf_track] threads=1 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 6.842 s | predict 2.492 | weight 1.614 | resample 0.846 (51 x) | impact 1.873
+  cycle mean 34.13 ms, max 134.41 ms, 90.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 79.7 m, spread 612.8 m (true impact 34921, 705)
+[pf_track] threads=2 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 3.509 s | predict 1.255 | weight 0.829 | resample 0.455 (50 x) | impact 0.961
+  cycle mean 17.50 ms, max 69.47 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 99.6 m, spread 593.2 m (true impact 34921, 705)
+[pf_track] threads=2 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 3.458 s | predict 1.252 | weight 0.814 | resample 0.423 (50 x) | impact 0.961
+  cycle mean 17.25 ms, max 68.60 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 99.6 m, spread 593.2 m (true impact 34921, 705)
+[pf_track] threads=4 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 1.803 s | predict 0.632 | weight 0.410 | resample 0.273 (51 x) | impact 0.483
+  cycle mean 8.99 ms, max 35.62 ms, 100.0% within 100 ms
+  pos RMSE 39.2 m, final 26.4 m | impact err 73.1 m, spread 603.8 m (true impact 34921, 705)
+[pf_track] threads=4 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 1.740 s | predict 0.630 | weight 0.410 | resample 0.214 (50 x) | impact 0.482
+  cycle mean 8.68 ms, max 34.48 ms, 100.0% within 100 ms
+  pos RMSE 39.3 m, final 25.9 m | impact err 41.5 m, spread 579.9 m (true impact 34921, 705)
+[pf_track] threads=8 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.936 s | predict 0.317 | weight 0.206 | resample 0.168 (50 x) | impact 0.242
+  cycle mean 4.67 ms, max 18.55 ms, 100.0% within 100 ms
+  pos RMSE 39.5 m, final 26.3 m | impact err 65.8 m, spread 596.6 m (true impact 34921, 705)
+[pf_track] threads=8 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.879 s | predict 0.316 | weight 0.211 | resample 0.108 (50 x) | impact 0.242
+  cycle mean 4.38 ms, max 17.32 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.1 m | impact err 63.7 m, spread 594.9 m (true impact 34921, 705)
+[pf_track] threads=16 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.538 s | predict 0.165 | weight 0.110 | resample 0.135 (51 x) | impact 0.126
+  cycle mean 2.68 ms, max 10.58 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.5 m | impact err 91.3 m, spread 601.8 m (true impact 34921, 705)
+[pf_track] threads=16 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.456 s | predict 0.163 | weight 0.109 | resample 0.059 (50 x) | impact 0.124
+  cycle mean 2.27 ms, max 8.90 ms, 100.0% within 100 ms
+  pos RMSE 39.5 m, final 26.6 m | impact err 56.7 m, spread 601.4 m (true impact 34921, 705)
+[pf_track] threads=32 N=100000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 0.322 s | predict 0.086 | weight 0.063 | resample 0.106 (51 x) | impact 0.065
+  cycle mean 1.60 ms, max 6.20 ms, 100.0% within 100 ms
+  pos RMSE 39.6 m, final 26.6 m | impact err 66.5 m, spread 594.5 m (true impact 34921, 705)
+[pf_track] threads=32 N=100000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 0.254 s | predict 0.087 | weight 0.064 | resample 0.036 (50 x) | impact 0.065
+  cycle mean 1.26 ms, max 4.84 ms, 100.0% within 100 ms
+  pos RMSE 39.4 m, final 26.8 m | impact err 81.4 m, spread 591.4 m (true impact 34921, 705)
+[pf_track] threads=16 N=10000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 37.915 s | predict 16.301 | weight 12.293 | resample 8.935 (36 x) | impact 0.269
+  cycle mean 188.99 ms, max 439.91 ms, 0.0% within 100 ms
+  pos RMSE 37.3 m, final 27.8 m | impact err 115.0 m, spread 319.4 m (true impact 34921, 705)
+[pf_track] threads=16 N=10000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 33.446 s | predict 16.198 | weight 12.206 | resample 4.735 (36 x) | impact 0.196
+  cycle mean 166.68 ms, max 282.57 ms, 0.0% within 100 ms
+  pos RMSE 37.3 m, final 27.8 m | impact err 115.1 m, spread 320.4 m (true impact 34921, 705)
+[pf_track] threads=32 N=10000000 steps=200 radars=3 ensemble=2000 resample=serial
+  total 22.441 s | predict 8.492 | weight 6.610 | resample 7.059 (36 x) | impact 0.209
+  cycle mean 111.85 ms, max 323.00 ms, 82.0% within 100 ms
+  pos RMSE 37.3 m, final 27.7 m | impact err 119.1 m, spread 322.3 m (true impact 34921, 705)
+[pf_track] threads=32 N=10000000 steps=200 radars=3 ensemble=2000 resample=parallel
+  total 17.727 s | predict 8.406 | weight 6.543 | resample 2.612 (36 x) | impact 0.105
+  cycle mean 88.33 ms, max 158.70 ms, 82.0% within 100 ms
+  pos RMSE 37.3 m, final 27.7 m | impact err 108.8 m, spread 321.1 m (true impact 34921, 705)
+== done: results/opt_resample_37988.csv (84 runs) ==
